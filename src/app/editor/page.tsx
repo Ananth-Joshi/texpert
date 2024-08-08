@@ -3,12 +3,22 @@ import React, {useEffect, useState } from 'react'
 import AceEditor from 'react-ace'
 import 'ace-builds/src-noconflict/mode-latex'
 import 'ace-builds/src-noconflict/theme-github_dark'
+import PdfViewer from '@/components/PdfViewer'
 
 function page() {
   const [content,setContent]=useState(
     "\\documentclass{article}\\usepackage{amsmath}\\title{Sample Document}\\author{John Doe}\\date{\\today}\\begin{document}\\maketitle\\section{Introduction}This is a sample document to demonstrate LaTeX compilation.\\section{Math Example}Here is a simple equation: $E = mc^2$.\\end{document}"
   )
-  const [pdf,setpdf]=useState<any>()
+  const [pdf,setpdf]=useState(
+    [
+      {
+        uri:'https://pdfobject.com/pdf/sample.pdf',
+        fileType:'pdf',
+        fileName:'demo.pdf'
+      }
+    ]
+  )
+
   useEffect(()=>{
     getPDF()
   },[content])
@@ -19,12 +29,11 @@ function page() {
     });
     const pdfBlob=await res.blob();
     const pdfUrl=URL.createObjectURL(pdfBlob);
-    console.log(pdfUrl)
-    setpdf(pdfUrl)
+    setpdf([{uri:pdfUrl,fileType:'pdf',fileName:'demo.pdf'}])
   }
 
   return (
-    <div className='h-full'>
+    <div className=''>
       <div className='flex gap-2 h-full m-4'>
       <AceEditor 
         showPrintMargin={false}
@@ -33,8 +42,9 @@ function page() {
         placeholder='%Write code Here'
         onChange={(value)=>{setContent(value)}}
       />
-
+      <PdfViewer documents={pdf}/>
       </div>
+
       <button onClick={async()=>{await getPDF()}}>click</button>
     </div>
   )
