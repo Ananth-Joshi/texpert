@@ -34,3 +34,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+#tex files
+document.aux
+document.log
+document.pdf
+document.tex
