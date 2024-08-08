@@ -6,7 +6,7 @@ import { exec } from "child_process";
 
 export async function POST(request:NextRequest){
     const {latex}=await request.json();
-
+    console.log(latex)
     if (!latex) {
         return NextResponse.json({ error: 'No LaTeX code provided' }, { status: 400 });
     }
@@ -35,7 +35,5 @@ export async function POST(request:NextRequest){
             resolve(response);
         });
     });
-
-    
-
 }
+
