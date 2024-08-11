@@ -49,8 +49,8 @@ npm install
 6. Upload images if required and use additional prompts to refine the document.
 
 ## Screenshots
-[Screenshot from 2024-08-12 01-20-12](https://github.com/user-attachments/assets/0dd3b1f3-01d0-44c9-90bd-a3611840e2e9)
-[image](https://github.com/user-attachments/assets/5d05f63c-35d7-4174-b8b2-bf777500f18a)
-[Screenshot from 2024-08-12 01-19-42](https://github.com/user-attachments/assets/e27d0479-d300-4a3a-9b77-5bac8934b47e)
+![Screenshot from 2024-08-12 01-20-12](https://github.com/user-attachments/assets/0dd3b1f3-01d0-44c9-90bd-a3611840e2e9)
+![image](https://github.com/user-attachments/assets/5d05f63c-35d7-4174-b8b2-bf777500f18a)
+![Screenshot from 2024-08-12 01-19-42](https://github.com/user-attachments/assets/e27d0479-d300-4a3a-9b77-5bac8934b47e)
 
 
