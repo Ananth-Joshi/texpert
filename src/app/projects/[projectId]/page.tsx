@@ -1,5 +1,5 @@
 'use client'
-import React, {FormEvent, useState } from 'react'
+import React, {FormEvent, useEffect, useState } from 'react'
 import AceEditor from 'react-ace'
 import 'ace-builds/src-noconflict/mode-latex'
 import 'ace-builds/src-noconflict/theme-github_dark'
@@ -9,17 +9,44 @@ import FileList from '@/components/FileList'
 import { IoMdArrowRoundBack } from "react-icons/io";
 import Link from 'next/link'
 import { codeGenerator } from '@/gemini/geminiCongif'
+import { auth } from '@/firebase/firebaseconfig'
+import { useParams, useRouter } from 'next/navigation'
+import SaveButton from '@/components/SaveButton'
+import { fetchProjectContent } from '@/firebase/functions'
 
 
 function page() {
   const [content,setContent]=useState(
     ""
   )
+  const router=useRouter()
   const [error,setError]=useState(false)
   const [pdf,setpdf]=useState('https://pdfobject.com/pdf/sample.pdf',)
   const [compiling,setCompiling]=useState(false)
+  const params=useParams()
+  const projectId=params.projectId
 
+  const fetchContent=async()=>{
+    try{
+        const cont=await fetchProjectContent(projectId as string)
+        setContent(cont as string)
+    }catch(e){
+        console.error('Error fetching latest content.')
+    }
+  }
 
+  useEffect(()=>{
+      auth.onAuthStateChanged((user)=>{
+        if(!user){
+          router.replace('/')
+          }
+        else{
+          router.refresh()
+          fetchContent()
+        }
+      })
+    },[]
+    )
   const editorRef:any = React.useRef(null);
 
   const handlePromptSubmit=async(e:FormEvent<HTMLFormElement>)=>{
@@ -27,9 +54,11 @@ function page() {
     const formData=new FormData(e.currentTarget)
     const prompt=formData.get('prompt')
     if(prompt){
+      setCompiling(true)
       const aiResponse=await codeGenerator(content+'\n'+JSON.stringify(prompt));
       console.log(aiResponse)
       setContent(aiResponse.toString())
+      setCompiling(false)
     }
   }
 
@@ -60,12 +89,15 @@ function page() {
           <Link href={'/'}>
             <IoMdArrowRoundBack size={40} className='text-white rounded-full hover:bg-gray-600 cursor-pointer'/>
           </Link>
-          <button className='bg-green-600 disabled:bg-green-300 p-2 rounded hover:bg-green-700 text-white'
-            disabled={compiling}
-            onClick={async()=>{await getPDF()}}
-          >
-            Recompile
-          </button>
+          <div className='flex gap-2'>
+            <SaveButton data={content}/>
+            <button className='bg-green-600 disabled:bg-green-300 p-2 rounded hover:bg-green-700 text-white'
+              disabled={compiling}
+              onClick={async()=>{await getPDF()}}
+            >
+              Recompile
+            </button>
+          </div>
         </div>
         <AceEditor ref={editorRef}
           showPrintMargin={false}
@@ -76,7 +108,7 @@ function page() {
           onChange={(value)=>{setContent(value)}}
         />
         <form onSubmit={handlePromptSubmit} className="flex gap-2 items-center p-4 bg-gray-600 rounded-lg shadow-md">
-          <textarea id="userInput" placeholder="Enter a prompt here" name='prompt'
+          <textarea id="userInput" required placeholder="Enter a prompt here" name='prompt'
             className="flex-grow p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" />
           <button id="sendButton" 
             className="p-4 text-white disabled:bg-blue-300 bg-blue-600 rounded-full hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"

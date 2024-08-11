@@ -16,6 +16,7 @@ const AddProjectCard:React.FunctionComponent<functionType>=({refreshFunction}) =
         await addDoc(collection(db, `${auth.currentUser?.uid}`), {
         name: projectName,
         createdAt: new Date(),
+        content:""
       });
    
       setProjectName('');

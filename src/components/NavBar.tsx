@@ -1,6 +1,7 @@
 'use client'
 import { auth } from '@/firebase/firebaseconfig';
 import { browserSessionPersistence, GoogleAuthProvider, onAuthStateChanged, signInWithPopup, signOut, User } from 'firebase/auth';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react'
 
@@ -37,7 +38,7 @@ function NavBar() {
     };
     return (
         <nav className="flex justify-between items-center h-20 py-4 px-6 bg-gray-800 text-white">
-      <h1 className="text-2xl">TeXpert</h1>
+      <Link href={'/'} className="text-2xl">TeXpert</Link>
       <div className="relative">
         {auth.currentUser ? (
           <div className="flex items-center">      
