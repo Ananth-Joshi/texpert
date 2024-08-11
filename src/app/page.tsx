@@ -1,11 +1,9 @@
 'use client'
-import { collection, addDoc } from "firebase/firestore";
-import { app, auth, db } from "@/firebase/firebaseconfig";
+import {auth} from "@/firebase/firebaseconfig";
 import NavBar from "@/components/NavBar";
-import { getProjects } from "@/firebase/functions";
-import { browserSessionPersistence, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { browserSessionPersistence, GoogleAuthProvider, onAuthStateChanged, signInWithPopup } from "firebase/auth";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 
 
@@ -13,6 +11,14 @@ export default function Home() {
   const provider=new GoogleAuthProvider()
   const router=useRouter()
   const [dropdownOpen,setDropdownOpen]=useState(false)
+
+  useEffect(()=>{
+    auth.onAuthStateChanged((user)=>{
+      if(user){
+        router.replace('/projects')
+      }
+    })
+  })
 
   const handleLogin = async () => {
     try {

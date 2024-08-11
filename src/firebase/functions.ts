@@ -1,13 +1,23 @@
 import { auth, db } from "./firebaseconfig"
-import { collection } from "firebase/firestore"
+import { collection, getDocs } from "firebase/firestore"
 
-export const getProjects=()=>{
-    try{
-        const uId=auth.currentUser?.uid
-        console.log(uId)
-        const colRef=collection(db,uId as string)
+
+
+export const fetchProjects = async () => {
+    try {
+      const querySnapshot = await getDocs(collection(db,`${auth.currentUser?.uid}`));
+      const projectList: { name: string; createdAt: Date,id:string }[] = [];
+      querySnapshot.forEach((doc) => {
+        const data = doc.data();
+        projectList.push({
+          name: data.name,
+          createdAt: data.createdAt.toDate(), // Convert Firestore timestamp to JavaScript Date
+          id:doc.id
+        });
+      });
+      return projectList;
+    } catch (error) {
+      console.error('Error fetching projects: ', error);
+      throw error;
     }
-    catch(error){
-        console.error('Error fetching projects: '+error)
-    }
-}
+  };

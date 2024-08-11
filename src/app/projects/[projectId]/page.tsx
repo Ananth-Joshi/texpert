@@ -1,5 +1,5 @@
 'use client'
-import React, {FormEvent, useEffect, useState } from 'react'
+import React, {FormEvent, useState } from 'react'
 import AceEditor from 'react-ace'
 import 'ace-builds/src-noconflict/mode-latex'
 import 'ace-builds/src-noconflict/theme-github_dark'
