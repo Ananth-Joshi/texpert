@@ -36,8 +36,8 @@ function NavBar() {
         }
     };
     return (
-        <nav className="flex justify-between items-center p-4 bg-gray-800 text-white">
-      <h1 className="text-xl">TeXpert</h1>
+        <nav className="flex justify-between items-center h-20 py-4 px-6 bg-gray-800 text-white">
+      <h1 className="text-2xl">TeXpert</h1>
       <div className="relative">
         {auth.currentUser ? (
           <div className="flex items-center">      
