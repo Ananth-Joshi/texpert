@@ -15,7 +15,7 @@ export async function POST(request: NextRequest) {
     await fs.writeFile(latexFilePath, latex);
 
     return new Promise((resolve) => {
-        exec(`pdflatex -interaction=nonstopmode ${latexFilePath}`, { timeout: 10000 }, async (error, stdout, stderr) => {
+        exec(`xelatex ${latexFilePath}`, { timeout: 10000 }, async (error, stdout, stderr) => {
             if (error) {
                 console.error(`Error: ${stderr}`);
                 return resolve(NextResponse.json({ error: 'Compilation failed', details: stderr }, { status: 500 }));

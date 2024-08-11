@@ -1,5 +1,5 @@
 'use client'
-import React, {FormEvent, useState } from 'react'
+import React, {FormEvent, useEffect, useState } from 'react'
 import AceEditor from 'react-ace'
 import 'ace-builds/src-noconflict/mode-latex'
 import 'ace-builds/src-noconflict/theme-github_dark'
@@ -8,23 +8,29 @@ import { IoSend } from "react-icons/io5";
 import FileList from '@/components/FileList'
 import { IoMdArrowRoundBack } from "react-icons/io";
 import Link from 'next/link'
-
+import { codeGenerator } from '@/gemini/geminiCongif'
 
 
 function page() {
   const [content,setContent]=useState(
-    "\\documentclass{article}\\usepackage{amsmath}\\title{Sample Document}\\author{John Doe}\\date{\\today}\\begin{document}\\maketitle\\section{Introduction}This is a sample document to demonstrate LaTeX compilation.\\section{Math Example}Here is a simple equation: $E = mc^2$.\\end{document}"
+    ""
   )
   const [error,setError]=useState(false)
   const [pdf,setpdf]=useState('https://pdfobject.com/pdf/sample.pdf',)
   const [compiling,setCompiling]=useState(false)
 
+
+  const editorRef:any = React.useRef(null);
+
   const handlePromptSubmit=async(e:FormEvent<HTMLFormElement>)=>{
     e.preventDefault();
     const formData=new FormData(e.currentTarget)
     const prompt=formData.get('prompt')
-    if(prompt)
-      setContent(prompt.toString())
+    if(prompt){
+      const aiResponse=await codeGenerator(content+'\n'+JSON.stringify(prompt));
+      console.log(aiResponse)
+      setContent(aiResponse.toString())
+    }
   }
 
   const getPDF=async()=>{
@@ -61,11 +67,11 @@ function page() {
             Recompile
           </button>
         </div>
-        <AceEditor 
+        <AceEditor ref={editorRef}
           showPrintMargin={false}
-          fontSize={18} wrapEnabled 
+          fontSize={18} wrapEnabled  setOptions={{newLineMode:'auto',}}
           height='80%' width='100%' value={content} theme='github_dark'  mode='latex'
-          placeholder='%Write code Here'
+          placeholder='%Write code Here' 
           className='rounded-xl'
           onChange={(value)=>{setContent(value)}}
         />
