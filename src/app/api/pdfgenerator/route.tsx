@@ -1,42 +1,59 @@
-import { NextRequest, NextResponse } from "next/server";
-import { promises as fs } from "fs";
-import path from "path";
-import process from "process";
-import { exec } from "child_process";
+import { NextRequest, NextResponse } from 'next/server';
+import { exec } from 'child_process';
+import { promisify } from 'util';
+import tmp from 'tmp';
+import fs from 'fs/promises';
+
+const execPromise = promisify(exec);
 
 export async function POST(request: NextRequest) {
     const { latex } = await request.json();
-    console.log(latex);
+    let tempCallback:()=>void;
+
     if (!latex) {
         return NextResponse.json({ error: 'No LaTeX code provided' }, { status: 400 });
     }
 
-    const latexFilePath = path.join(process.cwd(), 'document.tex');
-    await fs.writeFile(latexFilePath, latex);
-
-    return new Promise((resolve) => {
-        exec(`xelatex ${latexFilePath}`, { timeout: 10000 }, async (error, stdout, stderr) => {
-            if (error) {
-                console.error(`Error: ${stderr}`);
-                return resolve(NextResponse.json({ error: 'Compilation failed', details: stderr }, { status: 500 }));
-            }
-
-            // Check if the PDF file was created
-            const pdfFilePath = path.join(process.cwd(), 'document.pdf');
-            try {
-                const pdfBuffer = await fs.readFile(pdfFilePath);
-                const response = new NextResponse(pdfBuffer, {
-                    headers: {
-                        'Content-Type': 'application/pdf',
-                        'Content-Disposition': 'attachment; filename=document.pdf',
-                    },
-                });
-                resolve(response);
-            }catch(readError:unknown) {
-                console.error(`Error reading PDF: ${readError}`);
-                if(readError instanceof Error)
-                resolve(NextResponse.json({ error: 'PDF generation failed', details: readError }, { status: 500 }));
+    // Create a temporary directory
+    const tempDir = await new Promise<string>((resolve, reject) => {
+        tmp.dir({ unsafeCleanup: true }, (err, path, cleanupCallback) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(path);
+                tempCallback=cleanupCallback
             }
         });
     });
+
+    const latexFilePath = `${tempDir}/document.tex`;
+    await fs.writeFile(latexFilePath, latex);
+
+    try {
+        // Compile the LaTeX document to PDF
+        const { stdout, stderr } = await execPromise(`xelatex ${latexFilePath}`, { timeout: 10000, cwd: tempDir });
+
+        // Check if the PDF file was created
+        const pdfFilePath = `${tempDir}/document.pdf`;
+        const pdfBuffer = await fs.readFile(pdfFilePath);
+
+        const response = new NextResponse(pdfBuffer, {
+            headers: {
+                'Content-Type': 'application/pdf',
+                'Content-Disposition': 'attachment; filename=document.pdf',
+            },
+        });
+
+        // Clean up the temporary directory
+        await new Promise((resolve, reject) => {
+            tempCallback()
+            tmp.setGracefulCleanup();
+            resolve(null);
+        });
+
+        return response;
+    } catch (error) {
+        console.error('Error during PDF generation:', error);
+        return NextResponse.json({ error: 'PDF generation failed', details: error }, { status: 500 });
+    }
 }
