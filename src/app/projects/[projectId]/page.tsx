@@ -66,7 +66,7 @@ function page() {
     setCompiling(true)
     const res=await fetch('/api/pdfgenerator',{
       method:'POST',
-      body:JSON.stringify({latex:content}),
+      body:JSON.stringify({latex:content,firebaseFolderPath:`${auth.currentUser?.uid}/${params.projectId}`}),
     });
 
     if(res.status===500){

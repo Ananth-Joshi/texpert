@@ -1,7 +1,5 @@
-import { auth, db } from "./firebaseconfig"
+import { auth, db} from "./firebaseconfig"
 import { collection, doc, getDoc, getDocs, updateDoc } from "firebase/firestore"
-
-
 
 export const fetchProjects = async () => {
     try {
@@ -47,3 +45,9 @@ export const saveProjectContent=async({projectId,content}:{projectId:string,cont
       console.error('Error updating project content: ', error);
     }
   };
+
+
+
+
+
+  

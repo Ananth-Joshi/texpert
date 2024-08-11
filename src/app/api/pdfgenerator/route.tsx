@@ -3,13 +3,13 @@ import { exec } from 'child_process';
 import { promisify } from 'util';
 import tmp from 'tmp';
 import fs from 'fs/promises';
+import { downloadFilesFromFirebase } from '@/firebase/fileDownloader';
 
 const execPromise = promisify(exec);
 
 export async function POST(request: NextRequest) {
-    const { latex } = await request.json();
-    let tempCallback:()=>void;
-
+    const { latex, firebaseFolderPath } = await request.json();
+    let tempCallback:()=>void=()=>{};
     if (!latex) {
         return NextResponse.json({ error: 'No LaTeX code provided' }, { status: 400 });
     }
@@ -17,14 +17,18 @@ export async function POST(request: NextRequest) {
     // Create a temporary directory
     const tempDir = await new Promise<string>((resolve, reject) => {
         tmp.dir({ unsafeCleanup: true }, (err, path, cleanupCallback) => {
+            tempCallback=cleanupCallback
             if (err) {
                 reject(err);
             } else {
                 resolve(path);
-                tempCallback=cleanupCallback
+                
             }
         });
     });
+
+    //download files from the project firebase storage folder before compiling the latex document.
+    await downloadFilesFromFirebase(firebaseFolderPath,tempDir)
 
     const latexFilePath = `${tempDir}/document.tex`;
     await fs.writeFile(latexFilePath, latex);
@@ -46,7 +50,6 @@ export async function POST(request: NextRequest) {
 
         // Clean up the temporary directory
         await new Promise((resolve, reject) => {
-            tempCallback()
             tmp.setGracefulCleanup();
             resolve(null);
         });
@@ -55,5 +58,9 @@ export async function POST(request: NextRequest) {
     } catch (error) {
         console.error('Error during PDF generation:', error);
         return NextResponse.json({ error: 'PDF generation failed', details: error }, { status: 500 });
+    }finally{
+        if(tempCallback){
+            tempCallback()
+        }
     }
 }
