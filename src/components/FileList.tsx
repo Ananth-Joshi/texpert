@@ -67,7 +67,7 @@ const FileList: React.FC = () => {
       onDrop={handleDrop}
       onDragOver={handleDragOver}
     >
-      <h2 className='text-white text-lg mb-2 sticky'>Files</h2>
+      <h2 className='text-white text-lg mb-2 sticky'>Files (drag and drop only images)</h2>
       <ul className='text-white'>
         {files.length > 0 ? (
           files.map((fileName) => (
