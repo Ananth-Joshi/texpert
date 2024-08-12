@@ -34,14 +34,13 @@ sudo apt-get update
 sudo apt-get install -y curl git build-essential texlive-full
 ```
 ## Usage
+1. Input the necessary ENV variables. 
 
-1. Run the development server:
-
+2. Run the development server:
    ```bash
    npm run dev
    ```
-2. Input the necessary ENV variables. 
-
+   
 3. Open http://localhost:3000 to view it in the browser.
 
 4. Sign In with Google: Click on the "Sign In" button to authenticate using your Google account.
