@@ -18,6 +18,12 @@ RUN apt-get install -y curl
 # Install git
 RUN apt-get install -y git
 
+#install extras
+RUN apt-get install -y texlive-latex-extra
+RUN apt-get install -y texlive-fonts-recommended
+RUN apt-get install -y texlive-fonts-extra
+
+
 # Clean up APT when done
 RUN apt-get clean
 
