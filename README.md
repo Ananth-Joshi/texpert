@@ -24,30 +24,41 @@
 
 ## Installation
 
-To run TeXpert locally, clone the repository and install the dependencies.
 
-```bash
-git clone https://github.com/Ananth-Joshi/texpert.git
-cd TeXpert
-npm install
-sudo apt-get update
-sudo apt-get install -y curl git build-essential texlive-full
-```
-## Usage
-1. Input the necessary ENV variables. 
+### Using Docker
 
-2. Run the development server:
+To run TeXpert using Docker, follow these steps:
+
+1. **Clone the Repository**:
    ```bash
-   npm run dev
+   git clone https://github.com/Ananth-Joshi/texpert.git
    ```
-   
-3. Open http://localhost:3000 to view it in the browser.
 
-4. Sign In with Google: Click on the "Sign In" button to authenticate using your Google account.
+2. **Navigate to the Project Directory**:
+   ```bash
+   cd texpert
+   ```
 
-5. Enter your prompt in the input field and hit the prompt button to create your PDF.
+3. **Set Up Environment Variables**:
+   Create a `.env` file in the root of the project directory and add your Firebase and gemini configuration variables just like given in .env.example .
 
-6. Upload images if required and use additional prompts to refine the document.
+4. **Build the Docker Image**:
+   Run the following command to build the Docker image:
+   ```bash
+   docker build -t texpert .
+   ```
+
+5. **Run the Docker Container**:
+   Use the following command to run the Docker container:
+   ```bash
+   docker run -p 3000:3000 --env-file .env texpert
+   ```
+   This command maps port 3000 on your host machine to port 3000 in the container and uses the environment variables defined in the `.env` file.
+
+6. **Access the Application**:
+   Open your web browser and navigate to `http://localhost:3000` to access TeXpert running in the Docker container.
+
+
 
 ## Screenshots
 ![Screenshot from 2024-08-12 01-20-12](https://github.com/user-attachments/assets/0dd3b1f3-01d0-44c9-90bd-a3611840e2e9)
