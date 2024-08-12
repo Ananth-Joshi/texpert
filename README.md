@@ -27,7 +27,7 @@
 To run TeXpert locally, clone the repository and install the dependencies.
 
 ```bash
-git clone https://github.com/yourusername/TeXpert.git
+git clone https://github.com/Ananth-Joshi/texpert.git
 cd TeXpert
 npm install
 sudo apt-get update
