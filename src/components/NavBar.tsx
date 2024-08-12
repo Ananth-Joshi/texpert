@@ -43,7 +43,7 @@ function NavBar() {
         {auth.currentUser ? (
           <div className="flex items-center">      
           <span className="mr-4 items-center gap-2 bg-slate-300 text-black p-2 flex rounded-xl">
-          <img className='size-8 rounded-full ' src={auth.currentUser.photoURL as string}></img>     
+          <img alt='Profile Picture'className='size-8 rounded-full ' src={auth.currentUser.photoURL as string}></img>     
             {auth.currentUser.email}
             </span>
             <button 

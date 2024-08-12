@@ -15,7 +15,7 @@ import SaveButton from '@/components/SaveButton'
 import { fetchProjectContent } from '@/firebase/functions'
 
 
-function page() {
+function Page() {
   const [content,setContent]=useState(
     ""
   )
@@ -126,4 +126,4 @@ function page() {
   )
 }
 
-export default page
+export default Page

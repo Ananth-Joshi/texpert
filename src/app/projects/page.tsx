@@ -14,7 +14,7 @@ interface ProjectCard{
 }
 
 
-function page() {
+function Page() {
   const router=useRouter()
   const [projectList,setProjectList]=useState<ProjectCard[]|[]>([])
   
@@ -43,7 +43,7 @@ function page() {
           
           {
             projectList.map((p)=>(
-              <ProjectNameCard name={p.name} createdAt={p.createdAt} docId={p.id} />
+              <ProjectNameCard key={p.id} name={p.name} createdAt={p.createdAt} docId={p.id} />
             ))
           }
           <AddProjectCard refreshFunction={getProjects}/>
@@ -52,4 +52,4 @@ function page() {
   )
 }
 
-export default page
+export default Page
