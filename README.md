@@ -30,6 +30,8 @@ To run TeXpert locally, clone the repository and install the dependencies.
 git clone https://github.com/yourusername/TeXpert.git
 cd TeXpert
 npm install
+sudo apt-get update
+sudo apt-get install -y curl git build-essential texlive-full
 ```
 ## Usage
 
