@@ -56,7 +56,6 @@ function Page() {
     if(prompt){
       setCompiling(true)
       const aiResponse=await codeGenerator(content+'\n'+JSON.stringify(prompt));
-      console.log(aiResponse)
       setContent(aiResponse.toString())
       setCompiling(false)
     }
