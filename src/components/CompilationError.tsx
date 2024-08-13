@@ -1,7 +1,7 @@
 import React from 'react'
 import { RxCrossCircled } from "react-icons/rx";
 
-//compilation error component.
+//Compilation error component.
 function CompilationError() {
   return (
     <div className='flex rounded-xl flex-col justify-center items-center w-2/5 h-full bg-red-400'>

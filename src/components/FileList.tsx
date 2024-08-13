@@ -5,10 +5,12 @@ import { useParams } from 'next/navigation';
 import { MdDelete } from "react-icons/md";
 
 
+/*List of files and file upload component */
 const FileList: React.FC = () => {
   const [files, setFiles] = useState<string[]>([]); // Store only file names
   const params = useParams();
 
+  /*Function to fetch file names for files stored in firebase.*/
   const fetchFiles = async () => {
     const folderRef = ref(storage, `${auth.currentUser?.uid}/${params.projectId}`);
     console.log('Fetching from folder:', folderRef); // Log the folder reference
@@ -27,7 +29,7 @@ const FileList: React.FC = () => {
     const { files } = event.dataTransfer;
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
-      const fileRef = ref(storage, `${auth.currentUser?.uid}/${params.projectId}/${file.name}`); // Specify file path
+      const fileRef = ref(storage, `${auth.currentUser?.uid}/${params.projectId}/${file.name}`); /*Store file in path currentuserUID/projectID/fileName */
       try {
         await uploadBytes(fileRef, file);
         console.log('File uploaded:', file.name);

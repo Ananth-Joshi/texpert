@@ -7,6 +7,7 @@ interface ProjectCardProps{
     docId:string
 }
 
+/*Card to display a single project in project list along with project creation date. */
   const ProjectNameCard:React.FunctionComponent<ProjectCardProps> = ({name,createdAt,docId}) => {
     return (
       <Link href={`/projects/${docId}`}className="flex flex-col justify-center hover:bg-gray-400 cursor-pointer bg-white shadow-md  rounded-lg p-4 h-56 mb-4">

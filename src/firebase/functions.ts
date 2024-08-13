@@ -1,6 +1,8 @@
 import { auth, db} from "./firebaseconfig"
 import { collection, doc, getDoc, getDocs, updateDoc } from "firebase/firestore"
 
+
+/*Function to fetch list of projects.*/
 export const fetchProjects = async () => {
     try {
       const querySnapshot = await getDocs(collection(db,`${auth.currentUser?.uid}`));
@@ -20,6 +22,8 @@ export const fetchProjects = async () => {
     }
   };
 
+
+/*Function to get latex code from a particular project */
 export const fetchProjectContent = async (projectId:string) => {
     try {
       const docRef = doc(db, `${auth.currentUser?.uid}`, projectId); // Create a reference to the project document
@@ -34,6 +38,7 @@ export const fetchProjectContent = async (projectId:string) => {
     }
   };
 
+  /*Save project content(latex code) into firestore.*/
 export const saveProjectContent=async({projectId,content}:{projectId:string,content:string})=>{
     try {
       const docRef = doc(db, `${auth.currentUser?.uid}`, projectId); // Create a reference to the document

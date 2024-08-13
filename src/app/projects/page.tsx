@@ -13,7 +13,7 @@ interface ProjectCard{
   id:string
 }
 
-
+/*Page to show list of user projects.*/
 function Page() {
   const router=useRouter()
   const [projectList,setProjectList]=useState<ProjectCard[]|[]>([])
@@ -22,6 +22,8 @@ function Page() {
     const data=await fetchProjects()
     setProjectList(data)
   }
+
+  /*Check if user is authenticated */
   useEffect(()=>{
     auth.onAuthStateChanged((user)=>{
       if(!user){
@@ -43,10 +45,10 @@ function Page() {
           
           {
             projectList.map((p)=>(
-              <ProjectNameCard key={p.id} name={p.name} createdAt={p.createdAt} docId={p.id} />
+              <ProjectNameCard key={p.id} name={p.name} createdAt={p.createdAt} docId={p.id} /> /*Display list of projects of user.*/
             ))
           }
-          <AddProjectCard refreshFunction={getProjects}/>
+          <AddProjectCard refreshFunction={getProjects}/>{/*Add new project component.*/}
         </div>
     </div>
   )

@@ -5,6 +5,7 @@ import fetch from 'node-fetch'
 import fs from 'fs'
 
 
+/*Function to download images from firebase into the server temporary directory before compilation of latex code(to render images in PDF). */
 export async function downloadFilesFromFirebase(firebaseFolderPath: string, downloadFolderPath: string) {
     const folderRef = ref(storage, firebaseFolderPath);
     const { items } = await listAll(folderRef);

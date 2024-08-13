@@ -1,15 +1,18 @@
 'use client'
 import React, { useState } from 'react';
-import { getFirestore, collection, addDoc } from 'firebase/firestore';
-import { app, auth } from '@/firebase/firebaseconfig'; 
+import { collection, addDoc } from 'firebase/firestore';
+import {db, auth } from '@/firebase/firebaseconfig'; 
 
 interface functionType{
     refreshFunction:()=>Promise<void>
 }
+
+/*Add new project component.Takes the project list refresh function as props.*/
 const AddProjectCard:React.FunctionComponent<functionType>=({refreshFunction}) => {
   const [projectName, setProjectName] = useState('');
-  const db = getFirestore(app);
 
+
+  /*Function to create new form and display refresh the page.*/
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {

@@ -1,6 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/*Editor scrollbar CSS.*/
+
   /* Custom scrollbar styles */
   ::-webkit-scrollbar {
     width: 8px; /* Width of the scrollbar */

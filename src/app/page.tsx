@@ -6,12 +6,14 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 
-
+  /*Landing page.*/
 export default function Home() {
   const provider=new GoogleAuthProvider()
   const router=useRouter()
   const [dropdownOpen,setDropdownOpen]=useState(false)
 
+
+ /*Check if user is authenticated.*/
   useEffect(()=>{
     auth.onAuthStateChanged((user)=>{
       if(user){
@@ -20,6 +22,7 @@ export default function Home() {
     })
   })
 
+  /*Login the user using google provider.*/
   const handleLogin = async () => {
     try {
       auth.setPersistence(browserSessionPersistence)

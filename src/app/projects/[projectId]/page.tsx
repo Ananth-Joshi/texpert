@@ -14,18 +14,17 @@ import { useParams, useRouter } from 'next/navigation'
 import SaveButton from '@/components/SaveButton'
 import { fetchProjectContent } from '@/firebase/functions'
 
-
+/* PDF creation and editing page.*/
 function Page() {
-  const [content,setContent]=useState(
-    ""
-  )
+  const [content,setContent]=useState("") /*Content of the editor.*/
   const router=useRouter()
   const [error,setError]=useState(false)
-  const [pdf,setpdf]=useState('https://pdfobject.com/pdf/sample.pdf',)
-  const [compiling,setCompiling]=useState(false)
+  const [pdf,setpdf]=useState('https://pdfobject.com/pdf/sample.pdf',) /*Display a demo pdf initially.*/
+  const [compiling,setCompiling]=useState(false) /*Check if code is compiling or not.*/
   const params=useParams()
-  const projectId=params.projectId
+  const projectId=params.projectId /* Project Id from URL params.*/
 
+  /*Function to fetch previously saved code from firebase and set state.*/
   const fetchContent=async()=>{
     try{
         const cont=await fetchProjectContent(projectId as string)
@@ -35,6 +34,7 @@ function Page() {
     }
   }
 
+  /*Check if user is logged in. */
   useEffect(()=>{
       auth.onAuthStateChanged((user)=>{
         if(!user){
@@ -47,8 +47,8 @@ function Page() {
       })
     },[]
     )
-  const editorRef:any = React.useRef(null);
-
+  
+/*Function to submit user prompt.*/
   const handlePromptSubmit=async(e:FormEvent<HTMLFormElement>)=>{
     e.preventDefault();
     const formData=new FormData(e.currentTarget)
@@ -62,6 +62,7 @@ function Page() {
     }
   }
 
+/*Compile latex code from the backend and fetch the generated PDF.*/
   const getPDF=async()=>{
     setCompiling(true)
     const res=await fetch('/api/pdfgenerator',{
@@ -99,7 +100,8 @@ function Page() {
             </button>
           </div>
         </div>
-        <AceEditor ref={editorRef}
+         {/*Editor component for Latex code.*/}
+        <AceEditor
           showPrintMargin={false}
           fontSize={18} wrapEnabled  setOptions={{newLineMode:'auto',}}
           height='80%' width='100%' value={content} theme='github_dark'  mode='latex'
@@ -107,7 +109,7 @@ function Page() {
           className='rounded-xl'
           onChange={(value)=>{setContent(value)}}
         />
-        <form onSubmit={handlePromptSubmit} className="flex gap-2 items-center p-4 bg-gray-600 rounded-lg shadow-md">
+        <form onSubmit={handlePromptSubmit} className="flex gap-2 items-center p-4 bg-gray-600 rounded-lg shadow-md"> {/*Form to submit user prompt.*/}
           <textarea id="userInput" required placeholder="Enter a prompt here" name='prompt'
             className="flex-grow p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" />
           <button id="sendButton" 
@@ -119,7 +121,7 @@ function Page() {
         </form>  
       </div>
       {(error)?
-        <CompilationError/>:
+        <CompilationError/>: /*In case of error.*/
         <embed type='application/pdf' className='w-2/5 h-full rounded-xl' src={`${pdf}#zoom=80#toolbar=0`}/>
       }
     </div>

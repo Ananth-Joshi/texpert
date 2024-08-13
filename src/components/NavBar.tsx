@@ -5,6 +5,8 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react'
 
+
+/*NavBar component */
 function NavBar() {
     const provider = new GoogleAuthProvider();
     const [dropdownOpen, setDropdownOpen] = useState(false);

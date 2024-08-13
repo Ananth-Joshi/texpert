@@ -3,12 +3,14 @@ import { fetchProjectContent, saveProjectContent } from '@/firebase/functions'
 import { useParams, useSearchParams } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 
+/*Button to save changes made in the editor. */
 function SaveButton({data}:{data:string}) {
   const [serverContent,setServerContent]=useState('')
   const params=useParams()
   const projectId=params.projectId
   console.log(projectId)
   
+  /*Fetch latest code content in firestore database */
   const fetchContent=async()=>{
     try{
         const content=await fetchProjectContent(projectId as string)
@@ -22,7 +24,7 @@ function SaveButton({data}:{data:string}) {
     fetchContent()
   },[data])
 
-
+  /*Display 'Unsaved Changes if there is a difference between editor and database content.' */
   if(serverContent==data){
     return (
     <button className='bg-green-600  p-2 rounded hover:bg-green-700 text-white'
