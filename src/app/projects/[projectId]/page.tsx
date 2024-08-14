@@ -13,6 +13,8 @@ import { auth } from '@/firebase/firebaseconfig'
 import { useParams, useRouter } from 'next/navigation'
 import SaveButton from '@/components/SaveButton'
 import { fetchProjectContent } from '@/firebase/functions'
+import { AiOutlineLoading } from "react-icons/ai";
+
 
 /* PDF creation and editing page.*/
 function Page() {
@@ -20,7 +22,7 @@ function Page() {
   const router=useRouter()
   const [error,setError]=useState(false)
   const [pdf,setpdf]=useState('https://pdfobject.com/pdf/sample.pdf',) /*Display a demo pdf initially.*/
-  const [compiling,setCompiling]=useState(false) /*Check if code is compiling or not.*/
+  const [loading,setLoading]=useState(false) /*Check if code or pdf is being generated or not.*/
   const params=useParams()
   const projectId=params.projectId /* Project Id from URL params.*/
 
@@ -54,16 +56,16 @@ function Page() {
     const formData=new FormData(e.currentTarget)
     const prompt=formData.get('prompt')
     if(prompt){
-      setCompiling(true)
+      setLoading(true)
       const aiResponse=await codeGenerator(content+'\n'+JSON.stringify(prompt));
       setContent(aiResponse.toString())
-      setCompiling(false)
+      setLoading(false)
     }
   }
 
 /*Compile latex code from the backend and fetch the generated PDF.*/
   const getPDF=async()=>{
-    setCompiling(true)
+    setLoading(true)
     const res=await fetch('/api/pdfgenerator',{
       method:'POST',
       body:JSON.stringify({latex:content,firebaseFolderPath:`${auth.currentUser?.uid}/${params.projectId}`}),
@@ -78,7 +80,7 @@ function Page() {
     const pdfBlob=await res.blob();
     const pdfUrl=URL.createObjectURL(pdfBlob);
     setpdf(pdfUrl)
-    setCompiling(false)
+    setLoading(false)
   }
 
   return (
@@ -92,7 +94,7 @@ function Page() {
           <div className='flex gap-2'>
             <SaveButton data={content}/>
             <button className='bg-green-600 disabled:bg-green-300 p-2 rounded hover:bg-green-700 text-white'
-              disabled={compiling}
+              disabled={loading}
               onClick={async()=>{await getPDF()}}
             >
               Recompile
@@ -108,14 +110,15 @@ function Page() {
           className='rounded-xl'
           onChange={(value)=>{setContent(value)}}
         />
+        {/*Form to submit user prompt.*/}
         <form onSubmit={handlePromptSubmit} className="flex gap-2 items-center p-4 bg-gray-600 rounded-lg shadow-md"> {/*Form to submit user prompt.*/}
           <textarea id="userInput" required placeholder="Enter a prompt here" name='prompt'
             className="flex-grow p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" />
           <button id="sendButton" 
             className="p-4 text-white disabled:bg-blue-300 bg-blue-600 rounded-full hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            disabled={compiling} 
+            disabled={loading} 
           >
-            <IoSend size={20}/>
+            {(loading)?(<AiOutlineLoading size={20} className='animate-spin'/>):(<IoSend size={20}/>)}
           </button>  
         </form>  
       </div>
