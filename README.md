@@ -66,4 +66,8 @@ To run TeXpert using Docker, follow these steps:
 ![image](https://github.com/user-attachments/assets/5d05f63c-35d7-4174-b8b2-bf777500f18a)
 ![Screenshot from 2024-08-12 01-19-42](https://github.com/user-attachments/assets/e27d0479-d300-4a3a-9b77-5bac8934b47e)
 
+## Demo
+https://github.com/user-attachments/assets/6572b202-511e-49fd-b8a7-c802189f2aa1
+
+
 
