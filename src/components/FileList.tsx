@@ -29,6 +29,18 @@ const FileList: React.FC = () => {
     const { files } = event.dataTransfer;
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
+
+    // Check if the file is an image or font
+    const allowedTypes = ['image/', 'font/'];
+    const isAllowedType = allowedTypes.some(type => file.type.startsWith(type));
+
+    if (!isAllowedType) {
+      console.error('File type not allowed:', file.name);
+      alert(`${file.name} is not an allowed file type. Please upload images or fonts.`);
+      continue; // Skip this file
+    }
+
+
       const fileRef = ref(storage, `${auth.currentUser?.uid}/${params.projectId}/${file.name}`); /*Store file in path currentuserUID/projectID/fileName */
       try {
         await uploadBytes(fileRef, file);
@@ -56,8 +68,12 @@ const FileList: React.FC = () => {
   };
 
   useEffect(() => {
-    fetchFiles(); // Fetch files when the component mounts
-  });
+    auth.onAuthStateChanged((user)=>{
+      if(user){
+        fetchFiles()
+      }
+    })
+  },[]);
 
   useEffect(() => {
     console.log('Files updated:', files); // Log the updated files
@@ -69,7 +85,7 @@ const FileList: React.FC = () => {
       onDrop={handleDrop}
       onDragOver={handleDragOver}
     >
-      <h2 className='text-white text-lg mb-2 sticky'>Files (drag and drop only images)</h2>
+      <h2 className='text-white text-lg mb-2 sticky'>Files (drag and drop only images or fonts)</h2>
       <ul className='text-white'>
         {files.length > 0 ? (
           files.map((fileName) => (
