@@ -21,6 +21,7 @@
 2. **Generate PDF**: TeXpert will convert your prompt into LaTeX code and generate a PDF.
 3. **Iterate & Modify**: Use additional prompts to modify, extend, or refine the generated content.
 4. **Add Images**: Upload images to be embedded within the document at specified locations.
+5. **Add Fonts**: Add custom font files alongside images to render documents in your desired font.
 
 ## Installation
 
