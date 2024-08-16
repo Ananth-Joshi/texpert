@@ -8,7 +8,7 @@ import { IoSend } from "react-icons/io5";
 import FileList from '@/components/FileList'
 import { IoMdArrowRoundBack } from "react-icons/io";
 import Link from 'next/link'
-import { codeGenerator } from '@/gemini/geminiCongif'
+import { codeGenerator } from '@/gemini/geminiConfig'
 import { auth } from '@/firebase/firebaseconfig'
 import { useParams, useRouter } from 'next/navigation'
 import SaveButton from '@/components/SaveButton'
