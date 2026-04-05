@@ -38,17 +38,19 @@ function Page() {
 
   
   return (
-    <div className='h-screen'>
+     <div className='h-screen flex flex-col'>
         <NavBar/>
         <div className='h-20 bg-gray-800 text-center text-3xl text-white p-5'>PROJECTS</div>
-        <div className='flex pt-5 gap-2 flex-wrap justify-center h-[calc(100vh-10rem)] bg-gray-800'>
+        
+        {/* 2. Remove the calculated height, add "flex-1" and "overflow-y-auto" */}
+        <div className='flex pt-5 gap-2 flex-wrap justify-center flex-1 overflow-y-auto bg-gray-800'>
           
           {
             projectList.map((p)=>(
-              <ProjectNameCard key={p.id} name={p.name} createdAt={p.createdAt} docId={p.id} /> /*Display list of projects of user.*/
+              <ProjectNameCard key={p.id} name={p.name} createdAt={p.createdAt} docId={p.id} />
             ))
           }
-          <AddProjectCard refreshFunction={getProjects}/>{/*Add new project component.*/}
+          <AddProjectCard refreshFunction={getProjects}/>
         </div>
     </div>
   )

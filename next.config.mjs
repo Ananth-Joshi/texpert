@@ -1,4 +1,6 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {};
+const nextConfig = {
+  output: 'standalone',
+};
 
-export default nextConfig;
+export default nextConfig; // ✅ This is ESM and works in .mjs files
